@@ -1,4 +1,3 @@
-import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.closure
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -12,10 +11,8 @@ plugins {
     id("org.jetbrains.intellij") version "0.5.0"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "0.6.2"
-    // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
-    id("io.gitlab.arturbosch.detekt") version "1.14.1"
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
-    id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
+    //id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
 }
 
 // Import variables from gradle.properties file
@@ -41,7 +38,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.1")
+    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61")
 }
 
 // Configure gradle-intellij-plugin plugin.
@@ -57,19 +54,6 @@ intellij {
     setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
 }
 
-// Configure detekt plugin.
-// Read more: https://detekt.github.io/detekt/kotlindsl.html
-detekt {
-    config = files("./detekt-config.yml")
-    buildUponDefaultConfig = true
-
-    reports {
-        html.enabled = false
-        xml.enabled = false
-        txt.enabled = false
-    }
-}
-
 tasks {
     // Set the compatibility versions to 1.8
     withType<JavaCompile> {
@@ -80,10 +64,6 @@ tasks {
         getByName<KotlinCompile>(it) {
             kotlinOptions.jvmTarget = "1.8"
         }
-    }
-
-    withType<Detekt> {
-        jvmTarget = "1.8"
     }
 
     patchPluginXml {
@@ -116,7 +96,7 @@ tasks {
 
     publishPlugin {
         dependsOn("patchChangelog")
-        token(System.getenv("PUBLISH_TOKEN"))
+        token("perm:ZXZnZW55cnNr.OTItMjc5Nw==.oUHJNtpUsIoz5rsHmGw4lo2C0UJj3D")
         // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
         // https://jetbrains.org/intellij/sdk/docs/tutorials/build_system/deployment.html#specifying-a-release-channel
