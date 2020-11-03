@@ -37,9 +37,6 @@ repositories {
     mavenCentral()
     jcenter()
 }
-dependencies {
-    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61")
-}
 
 // Configure gradle-intellij-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
