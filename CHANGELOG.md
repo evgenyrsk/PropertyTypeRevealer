@@ -2,18 +2,8 @@
 
 # PropertyTypeRevealer Changelog
 
-## [Unreleased]
-### Added
+## [1.0.0]
+- The first working version.
 
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 ## [0.0.1-beta]
-### Added
-- Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+- Initial version created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)

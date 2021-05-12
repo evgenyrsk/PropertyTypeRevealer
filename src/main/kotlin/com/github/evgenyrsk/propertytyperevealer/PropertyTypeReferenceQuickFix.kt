@@ -11,10 +11,10 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  * Fix which adds a property type.
  */
 class PropertyTypeReferenceQuickFix(
-        private val type: String,
+    private val type: String,
 ) : LocalQuickFix {
 
-    override fun getName(): String = "Add the type: $type"
+    override fun getName(): String = "Insert the type: $type"
 
     override fun getFamilyName(): String = KotlinPropertyTypeReferenceInspection.INSPECTION_FAMILY_NAME
 
@@ -22,8 +22,7 @@ class PropertyTypeReferenceQuickFix(
         val elementToFix: KtProperty = descriptor.psiElement as KtProperty
 
         try {
-            val psiFactory = KtPsiFactory(elementToFix)
-            val type: KtTypeReference = psiFactory.createType(type)
+            val type: KtTypeReference = KtPsiFactory(elementToFix).createType(type)
             elementToFix.typeReference = type
         } catch (ignored: Exception) {
             // ignored

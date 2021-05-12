@@ -6,13 +6,11 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.4.10"
+    id("org.jetbrains.kotlin.jvm") version "1.5.0"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "0.5.0"
+    id("org.jetbrains.intellij") version "0.7.3"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "0.6.2"
-    // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
-    //id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
+    id("org.jetbrains.changelog") version "1.1.2"
 }
 
 // Import variables from gradle.properties file
@@ -32,13 +30,11 @@ val platformDownloadSources: String by project
 group = pluginGroup
 version = pluginVersion
 
-// Configure project's dependencies
 repositories {
     mavenCentral()
     jcenter()
 }
 
-// Configure gradle-intellij-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
     pluginName = pluginName_
@@ -100,3 +96,14 @@ tasks {
         channels(pluginVersion.split('-').getOrElse(1) { "default" }.split('.').first())
     }
 }
+//dependencies {
+//    implementation(kotlin("stdlib-jdk8"))
+//}
+//val compileKotlin: KotlinCompile by tasks
+//compileKotlin.kotlinOptions {
+//    jvmTarget = "1.8"
+//}
+//val compileTestKotlin: KotlinCompile by tasks
+//compileTestKotlin.kotlinOptions {
+//    jvmTarget = "1.8"
+//}

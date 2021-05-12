@@ -9,7 +9,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <localInspection
                 language="kotlin"
-                displayName="Set type reference for the property"
+                displayName="Set the type for the property"
                 groupBundle="messages.InspectionsBundle"
                 groupKey="group.names.inheritance.issues"
                 enabledByDefault="true"

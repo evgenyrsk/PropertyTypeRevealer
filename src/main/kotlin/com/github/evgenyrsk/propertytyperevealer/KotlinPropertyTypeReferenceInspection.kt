@@ -15,8 +15,8 @@ import org.jetbrains.kotlin.types.typeUtil.immediateSupertypes
 private const val DISPLAY_NAME = "The property is without type declaration"
 
 /**
- * An inspection for detecting places where there is no type for the property.
- * Highlights and offers to add a type if there is none [PropertyTypeReferenceQuickFix].
+ * An inspection for detecting places where the property with no type.
+ * The inspection highlights that place and offers to add an appropriate type [PropertyTypeReferenceQuickFix].
  */
 class KotlinPropertyTypeReferenceInspection : AbstractKotlinInspection() {
 
@@ -31,31 +31,38 @@ class KotlinPropertyTypeReferenceInspection : AbstractKotlinInspection() {
     override fun isEnabledByDefault(): Boolean = true
 
     override fun buildVisitor(
-            holder: ProblemsHolder,
-            isOnTheFly: Boolean,
-            session: LocalInspectionToolSession
+        holder: ProblemsHolder,
+        isOnTheFly: Boolean,
+        session: LocalInspectionToolSession
     ): PsiElementVisitor {
         return object : KtVisitorVoid() {
 
             override fun visitProperty(property: KtProperty) {
                 super.visitProperty(property)
-                if (property.typeReference == null) {
-                    registerProblem(
-                            holder,
-                            property,
-                            quickFixFactory.create(property.type().toString())
+
+                val possibleQuickFixes: MutableList<LocalQuickFix> = mutableListOf()
+                if (property.typeReference == null && (property.isTopLevel || property.isMember)) {
+
+                    possibleQuickFixes.add(
+                        quickFixFactory.create(
+                            property.type().toString()
+                        )
                     )
                     property.type()
-                            ?.immediateSupertypes()
-                            ?.forEach { kotlinType: KotlinType ->
-                                registerProblem(
-                                        holder,
-                                        property,
-                                        quickFixFactory.create(
-                                                constructSupertypeWithGenericArguments(kotlinType)
-                                        )
+                        ?.immediateSupertypes()
+                        ?.forEach { kotlinType: KotlinType ->
+                            possibleQuickFixes.add(
+                                quickFixFactory.create(
+                                    constructSupertypeWithGenericArguments(kotlinType)
                                 )
-                            }
+                            )
+                        }
+
+                    registerProblems(
+                        holder = holder,
+                        whatToFix = property,
+                        propertyTypeQuickFixes = possibleQuickFixes.toTypedArray()
+                    )
                 }
             }
         }
@@ -77,19 +84,19 @@ class KotlinPropertyTypeReferenceInspection : AbstractKotlinInspection() {
         return typeBuilder.toString()
     }
 
-    private fun registerProblem(
-            holder: ProblemsHolder,
-            whatToFix: PsiElement,
-            propertyTypeQuickFix: LocalQuickFix
+    private fun registerProblems(
+        holder: ProblemsHolder,
+        whatToFix: PsiElement,
+        propertyTypeQuickFixes: Array<LocalQuickFix>
     ) {
         holder.registerProblem(
-                whatToFix,
-                "There's no type reference for the property",
-                propertyTypeQuickFix
+            whatToFix,
+            "You should set a type for the property",
+            *propertyTypeQuickFixes
         )
     }
 
     companion object {
-        const val INSPECTION_FAMILY_NAME = "Add property type"
+        const val INSPECTION_FAMILY_NAME = "Code style inspections"
     }
 }
